@@ -24,15 +24,11 @@ func specialNum(k int, ts []int) (s int) {
 	p := 1
 	for _, t := range ts {
 		for j := 1; j <= t; j++ {
-			if (j%k != 0 && j == j/k+p) || (j%k == 0 && j == j/k+p-1) {
+			if j == (j-1)/k+p {
 				s++
 			}
 		}
-		if t%k != 0 {
-			p += t/k + 1
-		} else {
-			p += t / k
-		}
+		p += (t-1)/k + 1
 	}
 	return
 }
