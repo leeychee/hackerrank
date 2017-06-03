@@ -78,3 +78,23 @@ func counter4() <-chan *pair {
 	}()
 	return c
 }
+
+func counter5() <-chan int {
+	c := make(chan int)
+	go func() {
+		curMark := start
+		curT := 1
+		var v int
+		for {
+			v = curMark - curT + 1
+			c <- v
+			if v == 1 {
+				curMark *= 2
+				curT = 1
+			} else {
+				curT++
+			}
+		}
+	}()
+	return c
+}

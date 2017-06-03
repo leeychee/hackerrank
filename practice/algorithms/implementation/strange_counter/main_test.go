@@ -56,3 +56,10 @@ func BenchmarkCounter4(b *testing.B) {
 		<-pc
 	}
 }
+
+func BenchmarkCounter5(b *testing.B) {
+	pc := counter5()
+	for i := 0; i < b.N; i++ {
+		<-pc
+	}
+}
