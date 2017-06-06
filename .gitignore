@@ -2,3 +2,6 @@
 **/main
 **/debug
 *.test
+*.exe
+*.prof
+*.pprof
