@@ -11,7 +11,7 @@ import (
 func main() {
 	g, n := readInput(os.Stdin)
 	g.after(n)
-	fmt.Println(g)
+	fmt.Print(g)
 }
 
 func readInput(rd io.Reader) (*grid, int) {
@@ -113,6 +113,7 @@ func (g *grid) tick() []*cell {
 }
 
 func (g *grid) after(n int) {
+	gs := make([]*grid, n+1)
 	c := 1
 	for ; c <= n; c++ {
 		explosion := g.tick()
@@ -134,9 +135,18 @@ func (g *grid) after(n int) {
 		} else {
 			g.fill()
 		}
-		// fmt.Printf("--------------%d----------------\n", c)
+		gs[c] = g.deepCopy()
+		if c > 3 && gs[3].deepEqual(g) {
+			break
+		}
+		// fmt.Printf("--------------%d-----------------%t\n", c, gs[3] != nil)
 		// fmt.Println(g)
 		// fmt.Println("------------------------------")
+	}
+	if n > c {
+		i := (n-3)%(c-3) + 3
+		// fmt.Printf("n: %d, c: %d, i: %d\n", n, c, i)
+		g.g = gs[i].g
 	}
 	return
 }
