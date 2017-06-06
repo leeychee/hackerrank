@@ -136,7 +136,7 @@ func (g *grid) tick() []*cell {
 }
 
 func (g *grid) after(n int) {
-	gs := make([]*grid, n+1)
+	gs := make([]*grid, 1)
 	c := 1
 	for ; c <= n; c++ {
 		explosion := g.tick()
@@ -158,7 +158,7 @@ func (g *grid) after(n int) {
 		} else {
 			g.fill()
 		}
-		gs[c] = g.deepCopy()
+		gs = append(gs, g.deepCopy())
 		if c > 3 && gs[3].deepEqual(g) {
 			break
 		}
