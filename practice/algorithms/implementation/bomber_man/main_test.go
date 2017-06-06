@@ -2,7 +2,6 @@ package main
 
 import "testing"
 import "bytes"
-import "reflect"
 
 func TestAfter(t *testing.T) {
 	var cases = []struct {
@@ -29,7 +28,7 @@ OOO...O
 		g1 := newGrid(c.r, c.c)
 		g1.read(bytes.NewReader([]byte(c.fgs)))
 		g0.after(c.n)
-		if !reflect.DeepEqual(g0.g, g1.g) {
+		if g0.deepEqual(g1) {
 			t.Errorf("%s\nAfter %d, Expected:\n%s, Got:\n%s", c.ogs, c.n, g1, g0)
 		}
 	}
