@@ -42,7 +42,6 @@ func maxTwoCharacters(bs []byte) int {
 		counts = append(counts, count{k, v})
 	}
 	sort.Sort(countSorter(counts))
-	max := 0
 	for i := len(counts) - 1; i > 0; i-- {
 		for j := i - 1; j >= 0; j-- {
 			if counts[i].c-counts[j].c < 2 {
@@ -52,7 +51,7 @@ func maxTwoCharacters(bs []byte) int {
 			}
 		}
 	}
-	return max
+	return 0
 }
 
 func valid(bs []byte, a, b byte) bool {
