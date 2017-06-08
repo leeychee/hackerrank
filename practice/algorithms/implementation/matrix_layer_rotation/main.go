@@ -10,23 +10,35 @@ import (
 
 func main() {
 	m, r := readInput(os.Stdin)
+	// fmt.Println(r)
+	// fmt.Println(m)
+	if err := m.rotate(r); err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println(m)
-	fmt.Println(r)
 }
 
 func readInput(r io.Reader) (matrix, int) {
 	var m, n, rotation int
-	fmt.Fscanf(r, "%d %d %d\n", &m, &n, &rotation)
+	fmt.Fscanf(r, "%d %d %d", &m, &n, &rotation)
+	mtx := readMatrix(r, m, n)
+	return mtx, rotation
+}
 
+func readMatrix(r io.Reader, m, n int) matrix {
 	mtx := make(matrix, m)
 	for i := range mtx {
 		mtx[i] = make([]int, n)
 		for j := range mtx[i] {
-			fmt.Fscanf(r, "%d", &mtx[i][j])
+			p := "%d"
+			if j == len(mtx[i])-1 {
+				p = "%d\n"
+			}
+			fmt.Fscanf(r, p, &mtx[i][j])
 		}
 		// fmt.Fscanln(r)
 	}
-	return mtx, rotation
+	return mtx
 }
 
 type matrix [][]int
@@ -49,11 +61,36 @@ func (m matrix) String() string {
 
 var errUnableRotate = errors.New("unable rotate")
 
-func (m matrix) rotate() error {
+func (m matrix) rotate(times int) error {
 	r, c := len(m), len(m[0])
-	if r%2 != 0 && c%2 != 0 {
+	d := min(r, c)
+	if d%2 != 0 {
 		return errUnableRotate
 	}
-
+	for k := 0; k < d/2; k++ {
+		for l := 0; l < times%((r+c-4*k)*2-4); l++ {
+			lefttop := m[k][k]
+			for j := k; j < c-k-1; j++ {
+				m[k][j] = m[k][j+1]
+			}
+			for i := k; i < r-k-1; i++ {
+				m[i][c-k-1] = m[i+1][c-k-1]
+			}
+			for j := c - k - 1; j > k; j-- {
+				m[r-k-1][j] = m[r-k-1][j-1]
+			}
+			for i := r - k - 1; i > k; i-- {
+				m[i][k] = m[i-1][k]
+			}
+			m[k+1][k] = lefttop
+		}
+	}
 	return nil
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
